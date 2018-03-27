@@ -1,0 +1,36 @@
+enum Currency {
+  USD
+  MXN
+}
+
+enum Operation {
+  DEPOSIT
+  WITHRAW
+  TRANSFER
+}
+
+type Transaction @model {
+  id: ID! @isUnique
+  name: String!
+  description: String
+  operation: Operation!
+  value: Float!
+  account: Account @relation(name: "AccountTransactions")
+}
+
+type Account @model {
+  id: ID! @isUnique
+  name: String!
+  description: String
+  currency: Currency!
+  balance: Float @default(value: 0.0)
+  transactions: [Transaction!]! @relation(name: "AccountTransactions")
+  user: User @relation(name: "UserAccounts")
+}
+
+type User @model {
+  id: ID! @isUnique
+  name: String
+  dateOfBirth: DateTime
+  accounts: [Account!]! @relation(name: "UserAccounts")
+}
